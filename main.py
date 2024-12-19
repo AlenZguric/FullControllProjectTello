@@ -57,7 +57,7 @@ try:
         current_time = time.time() * 1000  # Trenutno vreme u milisekundama
 
         # Proveri da li je prošlo 1000 ms
-        if current_time - last_telemetry_time >= 1000:
+        if current_time - last_telemetry_time >= 500:
             telemetry = get_telemetry_data(tello)  # Ažuriraj telemetriju
             last_telemetry_time = current_time  # Postavi poslednje vreme
 
