@@ -4,6 +4,20 @@ from djitellopy import Tello
 from components.display import Display
 from utils.telemetry import get_telemetry_data
 
+def display_error_message(screen, message):
+    """Prikazuje grešku na ekranu i čeka zatvaranje prozora."""
+    screen.fill((0, 0, 0))
+    font = pygame.font.Font(None, 36)
+    label = font.render(message, True, (255, 0, 0))
+    screen.blit(label, (50, 100))
+    pygame.display.flip()
+
+    running = True
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+
 # Inicijalizacija pygame-a
 pygame.init()
 
@@ -15,16 +29,16 @@ pygame.display.set_caption("Tello Display")
 tello = Tello()
 try:
     tello.connect()
-    time.sleep(4)
-    # Pokreni video stream
-    print("Pokušavam da pokrenem video stream...")
-    if tello.streamon():
-        print("Stream pokrenut, spreman za poletanje.")
-        tello.takeoff()
-    else:
 
-        print("Stream nije uspeo da se pokrene. Proveri konekciju.")
+    # Pokušaj pokretanja video stream-a
+    print("Pokušavam da pokrenem video stream...")
+    if not tello.streamon():
+        print("Stream nije uspeo da se pokrene.")
+        display_error_message(screen, "Stream nije uspeo da se pokrene. Zatvorite prozor.")
         raise RuntimeError("Nije moguće pokrenuti video stream.")
+
+    print("Stream pokrenut, spreman za poletanje.")
+    tello.takeoff()
 
     # Kreiraj instancu za prikaz
     display = Display(screen, 1200, 800)
