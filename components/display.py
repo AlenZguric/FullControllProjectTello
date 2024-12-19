@@ -17,6 +17,7 @@ class Display:
         self._draw_video(frame)
 
     def _draw_telemetry(self, telemetry):
+        self.screen.fill((0, 0, 0))  # Očisti prethodne podatke
         y_offset = 20
         for key, value in telemetry.items():
             text = f"{key}: {value}"
@@ -26,7 +27,7 @@ class Display:
 
     def _draw_video(self, frame):
         if frame is not None:
-            frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            #frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
             frame = np.rot90(frame)
             frame = pygame.surfarray.make_surface(frame)
             self.screen.blit(frame, (self.width // 2, 0))
